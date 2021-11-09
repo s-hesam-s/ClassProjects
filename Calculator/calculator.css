@@ -1,0 +1,31 @@
+.rounded-circle {
+  height: 80px;
+  width: 80px;
+}
+
+.rounded {
+  border-radius: 1.5rem !important;
+}
+
+.btn-darkLiver {
+  background-color: #505050;
+  color: #fff !important;
+  font-size: 2rem;
+}
+
+.btn-lightGray {
+  background-color: #d4d4d2;
+  color: #000 !important;
+  font-size: 1.5rem;
+}
+
+.btn-orange {
+  background-color: #ff9500;
+  color: #fff !important;
+  font-size: 2rem;
+}
+
+.form-control {
+  border-color: #212524;
+  font-size: 2rem;
+}

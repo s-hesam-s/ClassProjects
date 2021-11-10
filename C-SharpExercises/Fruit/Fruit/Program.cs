@@ -8,7 +8,7 @@ namespace Fruit
     {
         static void Main(string[] args)
         {
-            PrintInvoice(PriceList(3), CustomerList(2));
+            PrintInvoice(PriceList(2), CustomerList(2));
         }
         public static double Check(string number)
         {
@@ -53,28 +53,41 @@ namespace Fruit
         public static double TotalPrice(List<Fruit> priceList, List<Fruit> customerList)
         {
             var factor = from weight in customerList
-                         join price in priceList
-                         on weight.Name.ToLower() equals price.Name.ToLower()
-                         select new
-                         {
-                             fruitName = weight.Name.ToLower(),
-                             fruitWeightKilo = weight.WeightKilo,
-                             fruitPricePerKilo = price.PricePerKilo,
-                             totalPricePerFruit = weight.WeightKilo * price.PricePerKilo
-                         };
-            return factor.Sum(i => i.totalPricePerFruit);
-        }
-        public static void PrintInvoice(List<Fruit> priceList, List<Fruit> customerList)
-        {
-            var factor = (from weight in customerList
                           join price in priceList
                           on weight.Name.ToLower() equals price.Name.ToLower()
+                          into a
+                          from b in a.DefaultIfEmpty(new Fruit() { PricePerKilo = 20 })
                           select new
                           {
                               fruitName = weight.Name.ToLower(),
                               fruitWeightKilo = weight.WeightKilo,
-                              fruitPricePerKilo = price.PricePerKilo,
-                              totalPricePerFruit = weight.WeightKilo * price.PricePerKilo
+                              fruitPricePerKilo = b.PricePerKilo,
+                              totalPricePerFruit = weight.WeightKilo * b.PricePerKilo
+                          };
+            return factor.Sum(i => i.totalPricePerFruit);
+        }
+        public static void PrintInvoice(List<Fruit> priceList, List<Fruit> customerList)
+        {
+            foreach (var fruit in customerList)
+            {
+                if (!priceList.Exists(p => p.Name == fruit.Name))
+                {
+                    Console.WriteLine($"\nPrice for {fruit.Name} is not available, we'll charghe you $20" +
+                        $" per kilo for {fruit.Name}\n");
+                }
+            }
+
+            var factor = (from weight in customerList
+                          join price in priceList
+                          on weight.Name.ToLower() equals price.Name.ToLower()
+                          into a
+                          from b in a.DefaultIfEmpty(new Fruit() { PricePerKilo = 20 })
+                          select new
+                          {
+                              fruitName = weight.Name.ToLower(),
+                              fruitWeightKilo = weight.WeightKilo,
+                              fruitPricePerKilo = b.PricePerKilo,
+                              totalPricePerFruit = weight.WeightKilo * b.PricePerKilo
                           }).ToList();
             double totalPrice = TotalPrice(priceList, customerList);
             factor.ForEach(i => Console.WriteLine($"Fruit Name:\t\t{i.fruitName}\nWeight In Kilo:\t\t{i.fruitWeightKilo}\n" +

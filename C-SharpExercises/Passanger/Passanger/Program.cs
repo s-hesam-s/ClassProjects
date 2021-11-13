@@ -8,7 +8,9 @@ namespace Passanger
     {
         static void Main(string[] args)
         {
-            var PassangersList = GetPassangersList(4);
+            Console.Write("Enter the number of passangers:");
+            int number = CheckInt(Console.ReadLine());
+            var PassangersList = GetPassangersList(number);
 
             Console.WriteLine($"\nDetails identity for the oldest person/people in passanger list:\n");
             Print(GetOldest(PassangersList));
@@ -19,12 +21,22 @@ namespace Passanger
             Console.WriteLine($"\nDetails identity for the oldest female person/people in passanger list:\n");
             Print(GetOldestWomen(PassangersList));
         }
-        public static DateTime Check(string number)
+        public static DateTime CheckDateTime(string number)
         {
             DateTime result;
             while (!DateTime.TryParse(number, out result))
             {
                 Console.WriteLine("Enter a valid date");
+                number = Console.ReadLine();
+            }
+            return result;
+        }
+        public static int CheckInt(string number)
+        {
+            int result;
+            while (!int.TryParse(number, out result))
+            {
+                Console.WriteLine("Enter a valid number");
                 number = Console.ReadLine();
             }
             return result;
@@ -36,14 +48,14 @@ namespace Passanger
             for (int i = 0; i < numberOfPassangers; i++)
             {
                 Person person = new Person();
-                Console.Write("Enter the name of the passanger: ");
+                Console.Write("\nEnter the name of the passanger: ");
                 person.Name = Console.ReadLine().Trim().ToLower();
                 Console.Write("Enter the lastname of the passanger: ");
                 person.LastName = Console.ReadLine().Trim().ToLower();
                 Console.Write("Enter the gender of the passanger: ");
                 person.Gender = Console.ReadLine().Trim().ToLower();
                 Console.Write("Enter the birthday of the passanger(month/day/year): ");
-                person.BirthDay = Check(Console.ReadLine());
+                person.BirthDay = CheckDateTime(Console.ReadLine());
                 passangersList.Add(person);
             }
             return passangersList;
@@ -105,7 +117,6 @@ namespace Passanger
                 Console.WriteLine($"\nFirst Name:\t\t{person.Name}\nLast Name:\t\t{person.LastName}\n" +
                $"Gender:\t\t\t{person.Gender}\nBirthday:\t\t{person.BirthDay.ToShortDateString()}");
             }
-
         }
     }
     class Person

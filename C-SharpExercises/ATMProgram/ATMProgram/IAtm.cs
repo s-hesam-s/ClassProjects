@@ -46,8 +46,8 @@ namespace ATMProgram
 
         public bool Transfer(Bank myBank, Bank desBank)
         {
-            Console.Write("\nEnter the amount you want to transfer:  ");
-            double amount = Convert.ToDouble(Console.ReadLine());
+            Console.Write("\nEnter the amount you want to transfer: $");
+            double amount = Bank.CheckDouble(Console.ReadLine());
             if (amount > myBank.Balance)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -57,35 +57,61 @@ namespace ATMProgram
             }
             else
             {
-                myBank.Balance -= amount;
-                desBank.Balance += amount;
-                Transaction transaction = new Transaction();
-                Guid obj = Guid.NewGuid();
-                transaction.Id = obj.ToString();
-                transaction.Withdraw = amount;
-                transaction.Deposit = 0;
-                transaction.DateTime = DateTime.Now;
-                myBank.Transactions.Add(transaction);
-
-                Transaction desTransaction = new Transaction();
-                Guid desObj = Guid.NewGuid();
-                desTransaction.Id = desObj.ToString();
-                desTransaction.Withdraw = 0;
-                desTransaction.Deposit = amount;
-                desTransaction.DateTime = DateTime.Now;
-                desBank.Transactions.Add(desTransaction);
-
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write($"\nTransfer is successful");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("\n*************************************************");
                 Console.ResetColor();
-                Console.Write($"\nYour tracking code is: {transaction.Id}");
-                return true;
+                Console.Write($"\nYour Balance: ${myBank.Balance}\n" +
+                    $"Amount: ${amount}\nDestination Bank Name: {desBank.Name}\n" +
+                    $"Destination Card Number: {desBank.CardNum}");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("\n*************************************************");
+                Console.ResetColor();
+                Console.WriteLine("\n\nAre you sure? Yes/No");
+                string sure = Console.ReadLine().ToLower();
+                while (sure != "no" && sure != "yes")
+                {
+                    Console.WriteLine("\nEnter Yes or No");
+                    sure = Console.ReadLine();
+                }
+                if (sure == "yes")
+                {
+                    myBank.Balance -= amount;
+                    desBank.Balance += amount;
+                    Transaction transaction = new Transaction();
+                    Guid obj = Guid.NewGuid();
+                    transaction.Id = obj.ToString();
+                    transaction.Withdraw = amount;
+                    transaction.Deposit = 0;
+                    transaction.DateTime = DateTime.Now;
+                    myBank.Transactions.Add(transaction);
+
+                    Transaction desTransaction = new Transaction();
+                    Guid desObj = Guid.NewGuid();
+                    desTransaction.Id = desObj.ToString();
+                    desTransaction.Withdraw = 0;
+                    desTransaction.Deposit = amount;
+                    desTransaction.DateTime = DateTime.Now;
+                    desBank.Transactions.Add(desTransaction);
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"\nTransfer is successful");
+                    Console.ResetColor();
+                    Console.Write($"\nYour tracking code is: {transaction.Id}");
+                    return true;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("\nTransfer has canceled");
+                    Console.ResetColor();
+                    return false;
+                }
             }
         }
         public bool Withdraw(Bank bank)
         {
-            Console.Write("\nEnter the amount you want to withdraw: ");
-            double amount = Convert.ToDouble(Console.ReadLine());
+            Console.Write("\nEnter the amount you want to withdraw: $");
+            double amount = Bank.CheckDouble(Console.ReadLine());
             if (amount > bank.Balance)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -95,19 +121,45 @@ namespace ATMProgram
             }
             else
             {
-                bank.Balance -= amount;
-                Transaction transaction = new Transaction();
-                Guid obj = Guid.NewGuid();
-                transaction.Id = obj.ToString();
-                transaction.Withdraw = amount;
-                transaction.Deposit = 0;
-                transaction.DateTime = DateTime.Now;
-                bank.Transactions.Add(transaction);
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write($"\nWithdrawal is successful");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("\n*************************************************");
                 Console.ResetColor();
-                Console.Write($"\nYour tracking code is: {transaction.Id}");
-                return true;
+                Console.Write($"\nYour Balance: ${bank.Balance}\n" +
+                    $"Amount: ${amount}");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("\n*************************************************");
+                Console.ResetColor();
+                Console.WriteLine("\n\nAre you sure? Yes/No");
+                string sure = Console.ReadLine().ToLower();
+                while (sure != "no" && sure != "yes")
+                {
+                    Console.WriteLine("\nEnter Yes or No");
+                    sure = Console.ReadLine();
+                }
+                if (sure == "yes")
+                {
+                    bank.Balance -= amount;
+                    Transaction transaction = new Transaction();
+                    Guid obj = Guid.NewGuid();
+                    transaction.Id = obj.ToString();
+                    transaction.Withdraw = amount;
+                    transaction.Deposit = 0;
+                    transaction.DateTime = DateTime.Now;
+                    bank.Transactions.Add(transaction);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"\nWithdrawal is successful");
+                    Console.ResetColor();
+                    Console.Write($"\nYour tracking code is: {transaction.Id}");
+                    return true;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("\nWithdrawal has canceled");
+                    Console.ResetColor();
+                    return false;
+                }
+
             }
         }
         public void PrintBalance(Bank bank)
@@ -115,7 +167,7 @@ namespace ATMProgram
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("\n*************************************************");
             Console.ResetColor();
-            Console.Write($"\nYour balance is: {bank.Balance}");
+            Console.Write($"\nYour balance is: ${bank.Balance}");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("\n*************************************************");
             Console.ResetColor();
@@ -167,8 +219,8 @@ namespace ATMProgram
                 Console.Write($"\nTransaction Id: {transaction.Id}\n" +
                 $"Transaction Date: {transaction.DateTime.ToLongDateString()}\n" +
                 $"Transaction Time: {transaction.DateTime.ToLongTimeString()}\n" +
-                $"Withdrawal Amount: {transaction.Withdraw}\n" +
-                $"Deposit Amount: {transaction.Deposit}");
+                $"Withdrawal Amount: ${transaction.Withdraw}\n" +
+                $"Deposit Amount: ${transaction.Deposit}");
             }
         }
     }

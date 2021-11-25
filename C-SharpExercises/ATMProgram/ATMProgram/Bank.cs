@@ -112,7 +112,7 @@ namespace ATMProgram
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("\nBalance cannot be negative");
                     Console.ResetColor();
-                    Console.Write("\nEnter positive balance: ");
+                    Console.Write("\nEnter positive balance: $");
                     value = Bank.CheckDouble(Console.ReadLine());
                 }
                 _balance = value;
@@ -124,7 +124,7 @@ namespace ATMProgram
             double result;
             while (!double.TryParse(number, out result))
             {
-                Console.WriteLine("Enter a valid number");
+                Console.Write("\nEnter a valid number: $");
                 number = Console.ReadLine();
             }
             return result;

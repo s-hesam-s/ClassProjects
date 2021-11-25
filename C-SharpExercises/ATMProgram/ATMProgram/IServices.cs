@@ -41,7 +41,7 @@ namespace ATMProgram
                 }
                 Console.Write("\nEnter your card's pass: ");
                 bank.CardPass = Console.ReadLine();
-                Console.Write("\nEnter your card's balance: ");
+                Console.Write("\nEnter your card's balance: $");
                 bank.Balance = Bank.CheckDouble(Console.ReadLine());
                 banks.Add(bank);
                 foreach (var item in banks)
@@ -52,7 +52,7 @@ namespace ATMProgram
                     Console.Write($"\nBank's Name: {item.Name}\n" +
                         $"Bank's Card Number: {item.CardNum}\n" +
                         $"Bank's Card Password: {item.CardPass}\n" +
-                        $"Bank's Balance: {item.Balance}");
+                        $"Bank's Balance: ${item.Balance}");
                 }
                 Console.WriteLine("\n\nDo you want to continue? Yes/No");
                 con = Console.ReadLine().ToLower();
@@ -145,7 +145,7 @@ namespace ATMProgram
                     switch (service)
                     {
                         case "1":
-                            string result2 = "";
+                            string result2;
                             Bank desBank;
                             do
                             {
